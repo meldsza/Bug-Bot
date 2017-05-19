@@ -11,6 +11,7 @@ const reportToText = require('./../lib/reportToText');
  */
 async function command(params, message) {
     if (!Object.values(config).includes(message.channel.id)) return;
+    if (Object.values(config).includes(config.bugHunterChannel) || Object.values(config).includes(config.modLogChannel)) return;
     params = params.join(' ');
     if (!params.includes('|'))
         return await message.reply("The Report should contain a |");
@@ -46,7 +47,7 @@ async function command(params, message) {
     if (reply != "")
         return await message.reply(reply);
     else {
-        report.messageID = await bot.channels.get(config.bugApprovalChannel).send({ attributes: report });
+        report.messageID = await bot.channels.get(config.bugApprovalChannel).send(report);
         new Report(report).save();
     }
 }

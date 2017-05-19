@@ -28,19 +28,16 @@ bot.on('message', (message) => {
         channel: message.channel.id
     }).save();
     if (message.author.bot) return;
+    if (!message.guild || message.guild.id != config.DTserverID) return;
     /**
      * Listen to messages and convert into params
      */
-    if (message.content.startsWith(settings.prefix)) {
-        /**Extracting params */
-        let params = message.content.substring(settings.prefix.length).trim();
-        params = params.split(settings.delimiter || ' ');
-        let cmd = params.shift().trim();
-        commands.execute(cmd.toLowerCase(), params, message)
-    }
-    else {
-        //ignore because normal message
-    }
+    if (!message.content.startsWith(settings.prefix)) return;
+    /**Extracting params */
+    let params = message.content.substring(settings.prefix.length).trim();
+    params = params.split(settings.delimiter || ' ');
+    let cmd = params.shift().trim();
+    commands.execute(cmd.toLowerCase(), params, message)
 });
 
 bot.on('ready', () => {
