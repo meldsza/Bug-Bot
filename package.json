@@ -1,20 +1,23 @@
 {
-  "name": "bugtracker",
-  "version": "1.0.0",
+  "name": "bugbot",
+  "version": "3.0.0",
   "description": "Link between Discord and Trello",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SamEm/Discord-trello.git"
+    "url": "git+https://github.com/meldsza/Bug-Bot"
   },
-  "author": "Logiz",
-  "license": "ISC",
-   "dependencies": {
-    "eris": "^0.4.0",
-    "node-trello": "^1.1.2"
+  "author": "Melroy",
+  "license": "MIT",
+  "dependencies": {
+    "bookshelf": "^0.10.3",
+    "discord.js": "^11.1.0",
+    "knex": "^0.13.0",
+    "node-trello": "^1.1.2",
+    "sqlite3": "^3.1.8"
   },
   "bugs": {
     "url": "https://github.com/SamEm/Discord-trello/issues"
