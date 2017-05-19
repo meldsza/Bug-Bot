@@ -31,9 +31,9 @@ bot.on('message', (message) => {
     /**
      * Listen to messages and convert into params
      */
-    if (message.content.startsWith(settings.identifier)) {
+    if (message.content.startsWith(settings.prefix)) {
         /**Extracting params */
-        let params = message.content.substring(settings.identifier.length).trim();
+        let params = message.content.substring(settings.prefix.length).trim();
         params = params.split(settings.delimiter || ' ');
         let cmd = params.shift().trim();
         commands.execute(cmd.toLowerCase(), params, message)

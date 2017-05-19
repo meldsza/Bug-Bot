@@ -1,0 +1,8 @@
+{
+    "header": "Short Description",
+    "steps": "Steps to Reproduce",
+    "expected": "Expect Result",
+    "actual": "Actual Result",
+    "client": "Client Settings",
+    "system": "System Settings"
+}

@@ -9,6 +9,8 @@ exports.up = function (knex, Promise) {
         t.string('client').notNull();
         t.string('system').notNull();
         t.string('author').notNull();
+        t.string('messageID').notNull();
+        t.string('channelID').notNull();
     });
 };
 
