@@ -132,15 +132,15 @@ function preCheckReproSetup(bot, reportKey, reproCnt, reproduction, userTag, cha
           utils.botReply(bot, userID, channelID, "you're missing a reason or system settings. Refer to #Bot-Help for more info", command, msgID, false);
           return;
         } else if(!!whichClient) {
-          if(whichClient[1].includes("-w")) {
+          if(whichClient[1].toLowerCase().includes("-w")) {
             system = "windows";
-          } else if(whichClient[1].includes("-i")) {
+          } else if(whichClient[1].toLowerCase().includes("-i")) {
             system = "ios";
-          } else if(whichClient[1].includes("-l")) {
+          } else if(whichClient[1].toLowerCase().includes("-l")) {
             system = "linux";
-          } else if(whichClient[1].includes("-m")) {
+          } else if(whichClient[1].toLowerCase().includes("-m")) {
             system = "macOS";
-          } else if(whichClient[1].includes("-a")) {
+          } else if(whichClient[1].toLowerCase().includes("-a")) {
             system = "android";
           }
           db.get("SELECT " + system + " FROM users WHERE userID = ?", [userID], function(error, usrSys) {
