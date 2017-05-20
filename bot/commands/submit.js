@@ -1,6 +1,7 @@
 
 const config = require('./../../config');
 const Report = require('./../../orm/Report');
+const User = require('./../../orm/User');
 const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
 const reportToText = require('./../lib/reportToText');
@@ -41,6 +42,17 @@ async function command(params, message) {
             report.client = params[i].substring("client settings:".length);
         else if (params[i].toLowerCase().startsWith("system settings:"))
             report.system = params[i].substring("system settings:".length);
+    }
+
+    let user = User.where('id', message.author.id).fetch();
+    if (user || user !== null) {
+        user = user.attributes;
+        report.system = report.system
+            .replace(' -a ', user.android)
+            .replace(' -m ', user.macOS)
+            .replace(' -l ', user.linux)
+            .replace(' -i ', user.iOS)
+            .replace(' -w ', user.windows)
     }
     let reply = "";
     Object.keys(report).forEach(function (key) {

@@ -24,6 +24,16 @@ async function command(params, message) {
         author: message.author.id,
         message: params[1]
     };
+    let user = User.where('id', message.author.id).fetch();
+    if (user || user !== null) {
+        user = user.attributes;
+        repro.message = repro.message
+            .replace(' -a ', user.android)
+            .replace(' -m ', user.macOS)
+            .replace(' -l ', user.linux)
+            .replace(' -i ', user.iOS)
+            .replace(' -w ', user.windows)
+    }
     //get the report in question
     let report = await Report.where('id', repro.id).fetch();
     if (!report || report == null)
