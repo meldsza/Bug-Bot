@@ -11,6 +11,7 @@ exports.up = function (knex, Promise) {
         t.string('author').notNull();
         t.string('messageID').notNull();
         t.string('channelID').notNull();
+        t.boolean('is_Trello').notNull();
     });
 };
 

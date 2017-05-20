@@ -15,7 +15,7 @@ async function command(params, message) {
     if (Object.values(config).includes(config.bugHunterChannel) || Object.values(config).includes(config.modLogChannel)) return;
     params = params.join(' ');
     if (!params.includes('|'))
-        return await message.reply("The Report should contain a |");
+        return (await message.reply("The Report should contain a |")).delete(delayInMS);
     params = params.split(' | ');
     let report = {
         id: reportID + "",
@@ -25,7 +25,9 @@ async function command(params, message) {
         actual: null,
         client: null,
         system: null,
-        channelID: message.channel.id
+        author: message.author.id,
+        channelID: message.channel.id,
+        is_Trello: false
     };
     params = params[1].split(' ');
     for (let i = 0; i < params.length; i++) {
@@ -46,8 +48,9 @@ async function command(params, message) {
             reply = reply + "**" + rp[key] + "** is missing";
         }
     });
-    if (reply != "")
-        return await message.reply(reply);
+    if (reply != "") {
+        return (await message.reply(reply)).delete(config.delayInMS);
+    }
     else {
         reportID++;
         report.messageID = await bot.channels.get(config.bugApprovalChannel).send(reportToText(report));

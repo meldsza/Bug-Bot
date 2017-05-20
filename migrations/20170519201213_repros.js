@@ -1,7 +1,7 @@
 
 exports.up = function (knex, Promise) {
     return knex.schema.createTable('repros', function (t) {
-        t.integer('id').notNull();
+        t.string('id').notNull();
         t.string('author').notNull();
         t.boolean('canRepro').notNull();
         t.text('message').notNull();

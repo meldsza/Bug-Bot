@@ -38,6 +38,7 @@ bot.on('message', (message) => {
     params = params.split(settings.delimiter || ' ');
     let cmd = params.shift().trim();
     commands.execute(cmd.toLowerCase(), params, message)
+    message.delete(settings.delayInMS)
 });
 
 bot.on('ready', () => {

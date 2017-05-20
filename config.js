@@ -5,6 +5,7 @@ var config = {
 
   prefix: '!',
   reportStartID: 1000,
+  minApprovals: 3,
 
   iosChannel: '202491590390841344',               //ios text Channel
   androidChannel: '232568032394870784',           //android text Channel
