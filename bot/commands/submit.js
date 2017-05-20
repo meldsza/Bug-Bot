@@ -4,6 +4,7 @@ const Report = require('./../../orm/Report');
 const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
 const reportToText = require('./../lib/reportToText');
+let reportID = config.reportStartID;
 /**
  * This method should return the response directly to the channel
  * @param {*string array} params 
@@ -17,6 +18,7 @@ async function command(params, message) {
         return await message.reply("The Report should contain a |");
     params = params.split(' | ');
     let report = {
+        id: reportID + "",
         header: params[0],
         steps: null,
         expected: null,
@@ -47,7 +49,8 @@ async function command(params, message) {
     if (reply != "")
         return await message.reply(reply);
     else {
-        report.messageID = await bot.channels.get(config.bugApprovalChannel).send(report);
+        reportID++;
+        report.messageID = await bot.channels.get(config.bugApprovalChannel).send(reportToText(report));
         new Report(report).save();
     }
 }

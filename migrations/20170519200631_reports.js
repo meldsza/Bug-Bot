@@ -1,7 +1,7 @@
 
 exports.up = function (knex, Promise) {
     return knex.schema.createTable('reports', function (t) {
-        t.integer('id').notNull();
+        t.string('id').notNull();
         t.string('header').notNull();
         t.text('steps').notNull();
         t.string('expected').notNull();
