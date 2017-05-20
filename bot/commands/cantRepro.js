@@ -4,7 +4,7 @@ const Report = require('./../../orm/Report');
 const Repro = require('./../../orm/Repro');
 const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
-const approve = require('./../lib/approve');
+const trelloUpdate = require('./../lib/trelloUpdate');
 const reportToText = require('./../lib/reportToText');
 /**
  * This method should return the response directly to the channel
@@ -12,18 +12,15 @@ const reportToText = require('./../lib/reportToText');
  * @param {*message} message
  */
 async function command(params, message) {
-    if (!Object.values(config).includes(config.bugApprovalChannel)) return;
-    //check permissions of the user
-    let roles = message.member.roles;
-    if (!(roles.get(config.hunterRole) || roles.get(config.adminRole) || roles.get(config.devRole) || roles.get(config.trelloModRole)))
-        return (await message.reply("You need to be a bug hunter to approve reports")).delete(config.delayInMS);
+    if (!Object.values(config).includes(message.channel.id)) return;
+    if (Object.values(config).includes(config.bugHunterChannel) || Object.values(config).includes(config.bugApprovalChannel) || Object.values(config).includes(config.modLogChannel)) return;
     params = params.join(' ');
     if (!params.includes('|'))
         return (await message.reply("The message should contain a |")).delete(config.delayInMS);
     params = params.split(' | ');
     let repro = {
         id: params[0] + "",
-        canRepro: true,
+        canRepro: false,
         author: message.author.id,
         message: params[1]
     };
@@ -32,8 +29,8 @@ async function command(params, message) {
     if (!report || report == null)
         return (await message.reply("This is an invalid report")).delete(delayInMS);
     report = report.attributes;
-    if (report.is_Trello)
-        return (await message.reply("This report is already approved")).delete(delayInMS);
+    if (!report.is_Trello)
+        return (await message.reply("This report is not yet approved")).delete(delayInMS);
     //find the repro in question
     let reprotest = await Repro.where('id', repro.id).where('author', repro.author).fetch();
     if (reprotest || reprotest != null) {
@@ -42,18 +39,14 @@ async function command(params, message) {
     }
     else {
         await new Repro(repro).save();
-        (await message.channel.reply("You have approved " + repro.id)).delete(delayInMS);
+        (await message.channel.reply("Your reproduction has been added to " + repro.id)).delete(delayInMS);
     }
-    reprotest = await Repro.where('id', repro.id).where('canRepro', true).count();
-    if (reprotest >= config.minApprovals) {
-        (await message.channel.send("Report " + repro.id + " has been approved")).delete(delayInMS);
-        return await approve(report);
-    }
+    return await trelloUpdate(report);
 }
 /**
  * description of the command
  */
-const description = "approve a bug in approval queue";
+const description = "set cantRepro to a bug";
 /**
  * Define Exports
  */

@@ -12,7 +12,7 @@ let reportID = config.reportStartID;
  */
 async function command(params, message) {
     if (!Object.values(config).includes(message.channel.id)) return;
-    if (Object.values(config).includes(config.bugHunterChannel) || Object.values(config).includes(config.modLogChannel)) return;
+    if (Object.values(config).includes(config.bugHunterChannel) || Object.values(config).includes(config.bugApprovalChannel) || Object.values(config).includes(config.modLogChannel)) return;
     params = params.join(' ');
     if (!params.includes('|'))
         return (await message.reply("The Report should contain a |")).delete(delayInMS);
