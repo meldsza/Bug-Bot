@@ -4,7 +4,7 @@ const Report = require('./../../orm/Report');
 const Repro = require('./../../orm/Repro');
 const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
-const trelloUpdate = require('./../lib/trelloUpdate');
+const reportUpdate = require('./../lib/reportUpdate');
 const reportToText = require('./../lib/reportToText');
 /**
  * This method should return the response directly to the channel
@@ -51,7 +51,7 @@ async function command(params, message) {
         await new Repro(repro).save();
         (await message.channel.reply("Your reproduction has been added to " + repro.id)).delete(delayInMS);
     }
-    return await trelloUpdate(report);
+    return await reportUpdate(report);
 }
 /**
  * description of the command
