@@ -6,6 +6,7 @@ const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
 const reportUpdate = require('./../lib/reportUpdate');
 const reportToText = require('./../lib/reportToText');
+const getTrelloReport = require('./../lib/getTrelloReport');
 /**
  * This method should return the response directly to the channel
  * @param {*string array} params 
@@ -28,15 +29,20 @@ async function command(params, message) {
     }
     //get the report in question
     let report = await Report.where('id', params[0]).fetch();
-    if (!message.member.roles.exists(config.adminRole) && !message.member.roles.exists(config.devRole))
+
+    if (!message.member.roles.exists(config.trelloModRole) && !message.member.roles.exists(config.adminRole) && !message.member.roles.exists(config.devRole)) {
         if (!report || report == null)
             return (await message.reply("This is an invalid report")).delete(delayInMS);
-    if (!message.member.roles.exists(config.trelloModRole) && !message.member.roles.exists(config.adminRole) && !message.member.roles.exists(config.devRole)) {
         if (report.get("author") != message.author.id)
             return (await message.reply("You can only edit your own report")).delete(delayInMS);
 
-        if (!report.attributes.is_Trello)
-            return (await message.reply("Only Trello mods can edit this")).delete(delayInMS);
+        else if (!report.attributes.is_Trello)
+            return (await message.reply("Only Trello mods or " + bot.users.get(report.get("author")).tag + " can edit this")).delete(delayInMS);
+    }
+    else if (!report || report == null) {
+        report = await getTrelloReport(params[0]);
+        if (!report || report == null)
+            return (await message.reply("This is an invalid report")).delete(delayInMS);
     }
     if ((/(title|header|short description)/i).test(params[1])) {
         report.set("header", params[3])
