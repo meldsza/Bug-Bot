@@ -48,11 +48,11 @@ async function command(params, message) {
     if (user || user !== null) {
         user = user.attributes;
         report.system = report.system
-            .replace(' -a ', user.android)
-            .replace(' -m ', user.macOS)
-            .replace(' -l ', user.linux)
-            .replace(' -i ', user.iOS)
-            .replace(' -w ', user.windows)
+            .replace('-a ', user.android + " ")
+            .replace(' -m ', user.macOS + " ")
+            .replace(' -l ', user.linux + " ")
+            .replace(' -i ', user.iOS + " ")
+            .replace(' -w ', user.windows + " ")
     }
     let reply = "";
     Object.keys(report).forEach(function (key) {

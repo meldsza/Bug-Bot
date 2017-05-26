@@ -4,6 +4,7 @@ const Report = require('./../../orm/Report');
 const Repro = require('./../../orm/Repro');
 const rp = require('./../../data/reportparts.json');
 const bot = require('./../bot');
+const reportUpdate = require('./../lib/reportUpdate');
 const deny = require('./../lib/deny');
 const reportToText = require('./../lib/reportToText');
 /**
@@ -31,11 +32,11 @@ async function command(params, message) {
     if (user || user !== null) {
         user = user.attributes;
         repro.message = repro.message
-            .replace(' -a ', user.android)
-            .replace(' -m ', user.macOS)
-            .replace(' -l ', user.linux)
-            .replace(' -i ', user.iOS)
-            .replace(' -w ', user.windows)
+            .replace('-a ', user.android + " ")
+            .replace(' -m ', user.macOS + " ")
+            .replace(' -l ', user.linux + " ")
+            .replace(' -i ', user.iOS + " ")
+            .replace(' -w ', user.windows + " ")
     }
     //get the report in question
     let report = await Report.where('id', repro.id).fetch();
@@ -62,9 +63,9 @@ async function command(params, message) {
             reply = reply + bot.users.get(d.attributes.author).tag + " - " + d.attributes.message + "\n";
         });
         (await message.channel.send(reply)).delete(delayInMS);
+        return await deny(report);
     }
-
-    return await deny(report);
+    reportUpdate(report);
 }
 /**
  * description of the command

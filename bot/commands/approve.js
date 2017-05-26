@@ -3,6 +3,7 @@ const config = require('./../../config');
 const Report = require('./../../orm/Report');
 const Repro = require('./../../orm/Repro');
 const rp = require('./../../data/reportparts.json');
+const reportUpdate = require('./../lib/reportUpdate');
 const bot = require('./../bot');
 const approve = require('./../lib/approve');
 const reportToText = require('./../lib/reportToText');
@@ -31,11 +32,11 @@ async function command(params, message) {
     if (user || user !== null) {
         user = user.attributes;
         repro.message = repro.message
-            .replace(' -a ', user.android)
-            .replace(' -m ', user.macOS)
-            .replace(' -l ', user.linux)
-            .replace(' -i ', user.iOS)
-            .replace(' -w ', user.windows)
+            .replace('-a ', user.android + " ")
+            .replace(' -m ', user.macOS + " ")
+            .replace(' -l ', user.linux + " ")
+            .replace(' -i ', user.iOS + " ")
+            .replace(' -w ', user.windows + " ")
     }
     //get the report in question
     let report = await Report.where('id', repro.id).fetch();
@@ -59,6 +60,7 @@ async function command(params, message) {
         (await message.channel.send("Report " + repro.id + " has been approved")).delete(delayInMS);
         return await approve(report);
     }
+    reportUpdate(report);
 }
 /**
  * description of the command

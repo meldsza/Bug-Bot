@@ -20,16 +20,17 @@ async function command(params, message) {
     if (user || user !== null) {
         user = user.attributes;
         params[3] = params[3]
-            .replace(' -a ', user.android)
-            .replace(' -m ', user.macOS)
-            .replace(' -l ', user.linux)
-            .replace(' -i ', user.iOS)
-            .replace(' -w ', user.windows)
+            .replace('-a ', user.android + " ")
+            .replace(' -m ', user.macOS + " ")
+            .replace(' -l ', user.linux + " ")
+            .replace(' -i ', user.iOS + " ")
+            .replace(' -w ', user.windows + " ")
     }
     //get the report in question
     let report = await Report.where('id', params[0]).fetch();
-    if (!report || report == null)
-        return (await message.reply("This is an invalid report")).delete(delayInMS);
+    if (!message.member.roles.exists(config.adminRole) && !message.member.roles.exists(config.devRole))
+        if (!report || report == null)
+            return (await message.reply("This is an invalid report")).delete(delayInMS);
     if (!message.member.roles.exists(config.trelloModRole) && !message.member.roles.exists(config.adminRole) && !message.member.roles.exists(config.devRole)) {
         if (report.get("author") != message.author.id)
             return (await message.reply("You can only edit your own report")).delete(delayInMS);
